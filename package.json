@@ -1,0 +1,31 @@
+{
+  "name": "binder-logging",
+  "version": "0.0.1",
+  "description": "Module for consistent logging across Binder components",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha test/all.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/binder-project/binder-logging.git"
+  },
+  "keywords": [
+    "binder",
+    "logging"
+  ],
+  "author": "Andrew Osheroff <andrewosh@gmail.com> (http://andrewosh.com/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/binder-project/binder-logging/issues"
+  },
+  "homepage": "https://github.com/binder-project/binder-logging",
+  "dependencies": {
+    "elasticsearch": "^10.1.2",
+    "winston": "^2.1.1",
+    "winston-logstash": "^0.2.11"
+  },
+  "devDependencies": {
+    "mocha": "^2.3.4"
+  }
+}
