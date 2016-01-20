@@ -22,6 +22,11 @@
   "homepage": "https://github.com/binder-project/binder-logging",
   "dependencies": {
     "elasticsearch": "^10.1.2",
+    "event-stream": "^3.3.2",
+    "lodash": "^4.0.0",
+    "nodejs-websocket": "^1.5.0",
+    "pump": "^1.0.1",
+    "socket.io-client": "^1.4.4",
     "winston": "^2.1.1",
     "winston-logstash": "^0.2.11"
   },
