@@ -27,7 +27,7 @@ describe('reader', function () {
     this.timeout(5000)
     var logger = getWriter()
     startTime = (new Date()).toISOString()
-    logger.info('this is an info message')
+    logger.info('this is an info message', { app: 'binder-logging-test' })
     // assume the message will be processed in one second
     setTimeout(function () {
       afterOneTime = (new Date()).toISOString()
@@ -50,7 +50,7 @@ describe('reader', function () {
     }).then(done, done)
   })
 
-  it('should get one messages for a certain app in the test interval', function (done) {
+  it('should get one message for a certain app in the test interval', function (done) {
     var logReader = getReader()
     logReader.getLogs({
       app: 'binder-logging-test',
@@ -79,6 +79,7 @@ describe('reader', function () {
   })
 
   it('should handle combined historical/streaming logs', function (done) {
+    this.timeout(10000)
     var logReader = getReader()
     var logger = getWriter()
     var stream = logReader.streamLogs({
@@ -87,14 +88,44 @@ describe('reader', function () {
     })
     var msgs = []
     stream.on('data', function (data) {
+      console.log('Received: ' + JSON.stringify(data))
       msgs.push(data)
-      if (msgs.length === 2) {
-        stream.destroy()
-        done()
-      }
     })
+    logger.info('this is the second message', {app: 'binder-logging-test'})
     setTimeout(function () {
-      logger.info('this is the second message', {app: 'binder-logging-test'})
-    }, 1000)
+      logger.info('this is the third message', {app: 'binder-logging-test'})
+    }, 3000)
+    setTimeout(function () {
+      stream.destroy()
+      if (msgs.length === 3) {
+        done()
+      } else {
+        done(new Error('wrong number of messages received: ' + msgs.length))
+      }
+    }, 5000)
+  })
+
+  it('should not receive streaming events from nonexistent apps', function (done) {
+    this.timeout(10000)
+    var logReader = getReader()
+    var logger = getWriter()
+    var stream = logReader.streamLogs({
+      app: 'binder-logging-test-fake',
+      after: startTime
+    })
+    var msgs = []
+    stream.on('data', function (data) {
+      console.log('Received: ' + JSON.stringify(data))
+      msgs.push(data)
+    })
+    logger.info('this is the fourth message', {app: 'binder-logging-test'})
+    setTimeout(function () {
+      stream.destroy()
+      if (msgs.length === 0) {
+        done()
+      } else {
+        done(new Error('wrong number of messages received: ' + msgs.length))
+      }
+    }, 3000)
   })
 })
