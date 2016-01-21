@@ -88,7 +88,6 @@ describe('reader', function () {
     })
     var msgs = []
     stream.on('data', function (data) {
-      console.log('Received: ' + JSON.stringify(data))
       msgs.push(data)
     })
     logger.info('this is the second message', {app: 'binder-logging-test'})
@@ -115,7 +114,6 @@ describe('reader', function () {
     })
     var msgs = []
     stream.on('data', function (data) {
-      console.log('Received: ' + JSON.stringify(data))
       msgs.push(data)
     })
     logger.info('this is the fourth message', {app: 'binder-logging-test'})
