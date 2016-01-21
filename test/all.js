@@ -11,11 +11,12 @@ describe('writer', function () {
   var logger = getWriter()
 
   it('should write general logs', function (done) {
-    logger.error('this is an error message')
+    logger.info('this is an info message')
     done()
   })
+
   it('should write app-specific logs', function (done) {
-    logger.error('this is an error message', {app: 'binder-logging-test'})
+    logger.info('this is an info message', {app: 'binder-logging-test'})
     done()
   })
 })
@@ -26,7 +27,7 @@ describe('reader', function () {
     this.timeout(5000)
     var logger = getWriter()
     startTime = (new Date()).toISOString()
-    logger.error('this is an error message')
+    logger.info('this is an info message')
     // assume the message will be processed in one second
     setTimeout(function () {
       afterOneTime = (new Date()).toISOString()
@@ -40,6 +41,7 @@ describe('reader', function () {
       assert(logs.length >= 1)
     }).then(done, done)
   })
+
   it('should get zero messages associated with a certain app since now', function (done) {
     var logReader = getReader()
     var date = (new Date()).toISOString()
@@ -47,6 +49,7 @@ describe('reader', function () {
       assert.equal(logs.length, 0)
     }).then(done, done)
   })
+
   it('should get one messages for a certain app in the test interval', function (done) {
     var logReader = getReader()
     logReader.getLogs({
@@ -57,7 +60,9 @@ describe('reader', function () {
       assert.equal(logs.length, 1)
     }).then(done, done)
   })
+
   it('should handle log streaming (with only historical data)', function (done) {
+    this.timeout(10000)
     var logReader = getReader()
     var stream = logReader.streamLogs({
       app: 'binder-logging-test',
@@ -72,6 +77,7 @@ describe('reader', function () {
       }
     })
   })
+
   it('should handle combined historical/streaming logs', function (done) {
     var logReader = getReader()
     var logger = getWriter()
@@ -87,6 +93,8 @@ describe('reader', function () {
         done()
       }
     })
-    logger.error('this is the second message', {app: 'binder-logging-test'})
+    setTimeout(function () {
+      logger.info('this is the second message', {app: 'binder-logging-test'})
+    }, 1000)
   })
 })
