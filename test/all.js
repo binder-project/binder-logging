@@ -3,22 +3,36 @@ var assert = require('assert')
 var getReader = require('../lib/reader.js')
 var getWriter = require('../lib/writer.js')
 
-var startTime = Date.now()
+// values set after the writer tests
+var startTime = null
+var afterOneTime = null
 
 describe('writer', function () {
+  var logger = getWriter()
+
   it('should write general logs', function (done) {
-    var logger = getWriter()
     logger.error('this is an error message')
     done()
   })
   it('should write app-specific logs', function (done) {
-    var logger = getWriter()
     logger.error('this is an error message', {app: 'binder-logging-test'})
     done()
   })
 })
 
 describe('reader', function () {
+
+  before(function (done) {
+    var logger = getWriter()
+    startTime = (new Date()).toISOString()
+    logger.error('this is an error message')
+    // assume the message will be processed in one second
+    setTimeout(function () {
+      afterOneTime = (new Date()).toISOString()
+      done()
+    }, 1000)
+  })
+
   it('should get all logs associated with a certain app', function (done) {
     var logReader = getReader()
     logReader.getLogs({ app: 'binder-logging-test' }).then(function (logs) {
@@ -27,13 +41,18 @@ describe('reader', function () {
   })
   it('should get zero messages associated with a certain app since now', function (done) {
     var logReader = getReader()
-    logReader.getLogs({ app: 'binder-logging-test', since: new Date() }).then(function (logs) {
+    var date = (new Date()).toISOString()
+    logReader.getLogs({ app: 'binder-logging-test', after: date }).then(function (logs) {
       assert.equal(logs.length, 0)
     }).then(done, done)
   })
-  it('should get all messages for a certain app since the beginning of testing', function (done) {
+  it('should get one messages for a certain app in the test interval', function (done) {
     var logReader = getReader()
-    logReader.getLogs({ app: 'binder-logging-test', since: startTime }).then(function (logs) {
+    logReader.getLogs({
+      app: 'binder-logging-test',
+      after: startTime,
+      before: afterOneTime
+    }).then(function (logs) {
       assert.equal(logs.length, 1)
     }).then(done, done)
   })
