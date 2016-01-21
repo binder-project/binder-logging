@@ -28,6 +28,7 @@
     "pump": "^1.0.1",
     "request": "^2.67.0",
     "socket.io-client": "^1.4.4",
+    "websocket": "^1.0.22",
     "winston": "^2.1.1",
     "winston-logstash": "^0.2.11"
   },

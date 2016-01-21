@@ -23,6 +23,7 @@ describe('writer', function () {
 describe('reader', function () {
 
   before(function (done) {
+    this.timeout(5000)
     var logger = getWriter()
     startTime = (new Date()).toISOString()
     logger.error('this is an error message')
@@ -30,7 +31,7 @@ describe('reader', function () {
     setTimeout(function () {
       afterOneTime = (new Date()).toISOString()
       done()
-    }, 1000)
+    }, 2000)
   })
 
   it('should get all logs associated with a certain app', function (done) {
@@ -58,7 +59,10 @@ describe('reader', function () {
   })
   it('should handle log streaming (with only historical data)', function (done) {
     var logReader = getReader()
-    var stream = logReader.streamLogs('binder-logging-test')
+    var stream = logReader.streamLogs({
+      app: 'binder-logging-test',
+      after: startTime
+    })
     var msgs = []
     stream.on('data', function (data) {
       msgs.push(data)
@@ -71,7 +75,10 @@ describe('reader', function () {
   it('should handle combined historical/streaming logs', function (done) {
     var logReader = getReader()
     var logger = getWriter()
-    var stream = logReader.streamLogs('binder-logging-test')
+    var stream = logReader.streamLogs({
+      app: 'binder-logging-test',
+      after: startTime
+    })
     var msgs = []
     stream.on('data', function (data) {
       msgs.push(data)
