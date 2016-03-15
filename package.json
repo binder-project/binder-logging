@@ -6,6 +6,11 @@
   "scripts": {
     "test": "mocha test/all.js"
   },
+  "browserify": {
+    "transform": [
+      "brfs"
+    ]
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/binder-project/binder-logging.git"
@@ -21,8 +26,10 @@
   },
   "homepage": "https://github.com/binder-project/binder-logging",
   "dependencies": {
+    "brfs": "^1.4.3",
     "elasticsearch": "^10.1.2",
     "event-stream": "^3.3.2",
+    "fs-extra": "^0.26.5",
     "lodash": "^4.0.0",
     "nodejs-websocket": "^1.5.0",
     "object-assign": "^4.0.1",
