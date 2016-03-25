@@ -32,6 +32,8 @@ The example configuration file included in the module has these defaults:
 ```
 `binder-control` can launch Docker containers for Elasticsearch, Logstash and Kibana (with the same default values) through the `binder-control start-service logging` command. If you'd prefer to use existing logging infrastructure, specify the custom host/port in the config file. 
 
+If `testing` is enabled, the Winston logger will output to both Logstash and stdout (only Logstash otherwise).
+
 ### install
 ```
 npm install binder-logging
@@ -40,7 +42,6 @@ npm install binder-logging
 ### reader
 `lib/reader.js` contains functions that wrap Elasticsearch queries to make it simpler to search through Binder logs. If you'd prefer to monitor a realtime stream of build logs, the `streamLogs` function is available (which will connect to Logstash's WebSocket output).
 
-#### api
 ##### `BinderLogReader.getLogs(opts, cb)` 
 Get all historical logs, optionally matching an app name and optionally between before/after times
  - `app` string - app name to filter on
@@ -60,6 +61,11 @@ var reader = getReader({ host: '<custom logging host>' })
 ```
 
 ### writer
+`lib/writer.js` exposes a `getInstance` function that will return a Winston logger given a logger name. This logger exposes the standard logging api (`logger.info`, `logger.error`, ...).
+
+##### `getInstance(name)`
+Returns a Winston logger that's connected to the Binder logging stack
+- `name` string - logger name (one logger will be created per name, per process)
 
 #### usage
 ```
