@@ -76,6 +76,7 @@ describe('reader', function () {
         done()
       }
     })
+    stream.resume()
   })
 
   it('should handle combined historical/streaming logs', function (done) {
@@ -90,6 +91,7 @@ describe('reader', function () {
     stream.on('data', function (data) {
       msgs.push(data)
     })
+    stream.resume()
     logger.info('this is the second message', {app: 'binder-logging-test'})
     setTimeout(function () {
       logger.info('this is the third message', {app: 'binder-logging-test'})
@@ -116,6 +118,7 @@ describe('reader', function () {
     stream.on('data', function (data) {
       msgs.push(data)
     })
+    stream.resume()
     logger.info('this is the fourth message', {app: 'binder-logging-test'})
     setTimeout(function () {
       stream.destroy()
