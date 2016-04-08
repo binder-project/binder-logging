@@ -1,6 +1,7 @@
 {
   "host": "localhost",
   "testing": true,
+
   "logstash": {
     "port": 8050,
     "configDir": "~/binder-control/services/logging/logstash/"

@@ -4,7 +4,8 @@
   "description": "Module for consistent logging across Binder components",
   "main": "index.js",
   "scripts": {
-    "test": "mocha test/all.js"
+    "test": "mocha test/all.js",
+    "postinstall": "node scripts/postinstall.js"
   },
   "browserify": {
     "transform": [
