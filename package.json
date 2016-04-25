@@ -1,6 +1,6 @@
 {
   "name": "binder-logging",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Module for consistent logging across Binder components",
   "main": "index.js",
   "scripts": {
