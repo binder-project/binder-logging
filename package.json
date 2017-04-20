@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha test/all.js",
-    "postinstall": "node scripts/postinstall.js"
+    "postinstall": "node scripts/postinstall.js",
+    "configure": "node scripts/configure-elasticsearch.js"
   },
   "browserify": {
     "transform": [
